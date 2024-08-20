@@ -1,7 +1,8 @@
 import express from 'express';
 import { Service } from '../db-utils/models.js';
-const serviceRouter = express.Router();
 
+import jwt from 'jsonwebtoken';
+const serviceRouter = express.Router();
 // 1. Get all services that are available
 serviceRouter.get('/available', async (req, res) => {
   try {
@@ -11,7 +12,14 @@ serviceRouter.get('/available', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
+serviceRouter.get("/available/:sku", async (req, res) => {
+  try {
+    const service = await Service.findOne({ sku: req.params.sku });
+    res.json(service);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 serviceRouter.get("/seller/:sellerId", async (req, res) => {
     try {
       const products = await Service.find({
@@ -24,16 +32,32 @@ serviceRouter.get("/seller/:sellerId", async (req, res) => {
   });
 
 // 3. Create a new service
-serviceRouter.post('/services', async (req, res) => {
-  const { name, description, sku, category, sellerInfo, price } = req.body;
+serviceRouter.post("/", async (req, res) => {
   try {
-    const newService = new Service({ name, description, sku, category, sellerInfo, price });
-    await newService.save();
-    res.status(201).json(newService);
+    const userInfo = jwt.verify(
+      req.headers["authorization"],
+      process.env.JWT_SECRET
+    );
+
+    if (userInfo.userType === "seller") {
+      const serviceBody = {
+        ...req.body,
+        sellerInfo: {
+          ...userInfo,
+        },
+      };
+
+      const newService = new Service(serviceBody);
+      const savedService = await newService.save();
+      res.status(201).json(savedService);
+    } else {
+      res.status(400).json({ msg: "Only a seller can do the action" });
+    }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
+
 
 // 4. Update an existing service
 serviceRouter.put('/services/:id', async (req, res) => {

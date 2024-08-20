@@ -5,7 +5,7 @@ const dbName = process.env.DB_NAME || "";
 const dbPassword = process.env.DB_PASSWORD || "";
 const dbUsr = process.env.DB_USERNAME || "";
 const dbCluster = process.env.DB_CLUSTER || "";
-const cloudUrl = `mongodb+srv://${dbUsr}:${dbPassword}@${dbCluster}/${dbName}?retryWrites=true&w=majority&appName=Cluster0`;
+const cloudUrl = `mongodb+srv://${dbUsr}:${dbPassword}@${dbCluster}/${dbName}?retryWrites=true&w=majority`;
 
 const connectViaMongoose = async () => {
   try {

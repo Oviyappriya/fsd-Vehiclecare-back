@@ -36,6 +36,15 @@ const serviceSchema = new Schema({
     required: true,
     trim: true
   },
+  images: {
+    type: [String], // Array of strings to store image URLs or paths
+    validate: {
+      validator: function (v) {
+        return Array.isArray(v) && v.every((url) => typeof url === "string");
+      },
+      message: "Images must be an array of strings",
+    },
+  },
   sellerInfo: {
     type: new Schema({
       name: {
@@ -70,4 +79,26 @@ const serviceSchema = new Schema({
 
 export const Service = mongoose.model('Service', serviceSchema,"services");
 
+const BookingSchema = new Schema({
+  bookingId: {
+    type: String,
+    required: true,
+  },
+  services: {
+    type: Array,
+  },
+  totalQty: {
+    type: Number,
+    required: true,
+  },
+  bookingTotal: {
+    type: Number,
+    required: true,
+  },
+  userId: {
+    type: String,
+    required: true,
+  },
+});
 
+export const Booking = mongoose.model("Booking", BookingSchema);
