@@ -82,22 +82,22 @@ export const Service = mongoose.model('Service', serviceSchema,"services");
 const BookingSchema = new Schema({
   bookingId: {
     type: String,
-    required: true,
+   
   },
   services: {
     type: Array,
   },
   totalQty: {
     type: Number,
-    required: true,
+    
   },
   bookingTotal: {
     type: Number,
-    required: true,
+    
   },
   userId: {
     type: String,
-    required: true,
+    
   },
 });
 
