@@ -1,10 +1,10 @@
-import express from 'express';
-import { Service } from '../db-utils/models.js';
+import express from "express";
+import { Service } from "../db-utils/models.js";
 
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 const serviceRouter = express.Router();
 // 1. Get all services that are available
-serviceRouter.get('/available', async (req, res) => {
+serviceRouter.get("/available", async (req, res) => {
   try {
     const services = await Service.find();
     res.status(200).json(services);
@@ -21,15 +21,15 @@ serviceRouter.get("/available/:sku", async (req, res) => {
   }
 });
 serviceRouter.get("/seller/:sellerId", async (req, res) => {
-    try {
-      const products = await Service.find({
-        "sellerInfo.userId": req.params.sellerId,
-      });
-      res.json(products);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  });
+  try {
+    const products = await Service.find({
+      "sellerInfo.userId": req.params.sellerId,
+    });
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // 3. Create a new service
 serviceRouter.post("/", async (req, res) => {
@@ -58,9 +58,8 @@ serviceRouter.post("/", async (req, res) => {
   }
 });
 
-
 // 4. Update an existing service
-serviceRouter.put('/services/:id', async (req, res) => {
+serviceRouter.put("/services/:id", async (req, res) => {
   const { id } = req.params;
   const { name, description, sku, category, sellerInfo, price } = req.body;
   try {
@@ -79,7 +78,7 @@ serviceRouter.put('/services/:id', async (req, res) => {
 });
 
 // 5. Delete an existing servic
-serviceRouter.delete('/services/:id', async (req, res) => {
+serviceRouter.delete("/services/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const deletedService = await Service.findByIdAndDelete(id);

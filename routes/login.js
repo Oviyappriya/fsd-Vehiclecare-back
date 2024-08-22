@@ -22,8 +22,8 @@ router.post("/", async (req, res) => {
     const userObj = user.toObject();
 
     delete userObj.password;
-    const authToken = jwt.sign(userObj, process.env.JWT_SECRET)
-    res.status(200).json({ msg: "Login successful" ,userToken:authToken});
+    const authToken = jwt.sign(userObj, process.env.JWT_SECRET);
+    res.status(200).json({ msg: "Login successful", userToken: authToken });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

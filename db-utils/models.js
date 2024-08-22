@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -6,98 +6,100 @@ const userSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   address: { type: String, required: true },
-  userType: { type: String, enum: ['customer', 'seller'], required: true },
+  userType: { type: String, enum: ["customer", "seller"], required: true },
   gstNo: { type: String, required: false },
   password: { type: String, required: true },
 });
 
-export const User = mongoose.model('User', userSchema);
+export const User = mongoose.model("User", userSchema);
 
-
-const serviceSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  description: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  sku: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true
-  },
-  category: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  images: {
-    type: [String], // Array of strings to store image URLs or paths
-    validate: {
-      validator: function (v) {
-        return Array.isArray(v) && v.every((url) => typeof url === "string");
+const serviceSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    sku: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
+    category: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    images: {
+      type: [String], // Array of strings to store image URLs or paths
+      validate: {
+        validator: function (v) {
+          return Array.isArray(v) && v.every((url) => typeof url === "string");
+        },
+        message: "Images must be an array of strings",
       },
-      message: "Images must be an array of strings",
+    },
+    sellerInfo: {
+      type: new Schema({
+        name: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        userId: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        phone: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        address: {
+          type: String,
+          trim: true,
+        },
+      }),
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
     },
   },
-  sellerInfo: {
-    type: new Schema({
-      name: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-      userId: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-      phone: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-      address: {
-        type: String,
-        trim: true,
-      },
-    }),
-  },
-  price: {
-    type: Number,
-    required: true,
-    min: 0
+  {
+    timestamps: true,
   }
-}, {
-  timestamps: true
-});
+);
 
-export const Service = mongoose.model('Service', serviceSchema,"services");
+export const Service = mongoose.model("Service", serviceSchema, "services");
 
 const BookingSchema = new Schema({
   bookingId: {
     type: String,
-   
+    required: true,
   },
   services: {
     type: Array,
   },
   totalQty: {
     type: Number,
-    
+    required: true,
   },
   bookingTotal: {
     type: Number,
-    
+    required: true,
   },
   userId: {
     type: String,
-    
+    required: true,
   },
 });
 
