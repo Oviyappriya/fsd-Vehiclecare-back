@@ -88,6 +88,7 @@ const BookingSchema = new Schema({
   },
   services: {
     type: Array,
+    required :true
   },
   totalQty: {
     type: Number,
