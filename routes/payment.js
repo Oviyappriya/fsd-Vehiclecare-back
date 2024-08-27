@@ -1,14 +1,19 @@
 import express from "express";
 import stripeFunc from "stripe";
+import cookieParser from "cookie-parser";
 
 const paymentRouter = express.Router();
-
 const stripe = stripeFunc(process.env.STRIPE_PRIVATE_KEY);
+
+paymentRouter.use(cookieParser());
 
 paymentRouter.post("/get-payment-session", async (req, res) => {
   try {
     const { services = [] } = req.body;
 
+    // Access cookies from the request
+    const userCookie = req.cookies.user; // Example: fetching a cookie named 'user'
+    
     const lineItems = services.map((service) => ({
       price_data: {
         currency: "USD",
@@ -31,7 +36,11 @@ paymentRouter.post("/get-payment-session", async (req, res) => {
       mode: "payment",
       success_url: `${process.env.FE_URL}/bookingSuccess`,
       cancel_url: `${process.env.FE_URL}/cart?payment=cancelled`,
+      // Optionally, you can store information in a cookie or use cookies to customize the session.
     });
+
+    // Set a cookie if needed
+    res.cookie("paymentSession", session.id, { httpOnly: true });
 
     res.json({ id: session.id });
   } catch (error) {

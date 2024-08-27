@@ -35,8 +35,8 @@ const tokenVerify = (req, res, next) => {
   }
 };
 app.use("/services", tokenVerify, serviceRouter);
-app.use("/booking", bookingRouter);
-app.use("/payment", paymentRouter);
+app.use("/booking",tokenVerify, bookingRouter);
+app.use("/payment", tokenVerify,paymentRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
