@@ -34,8 +34,8 @@ paymentRouter.post("/get-payment-session", async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: `${process.env.FE_URL}/bookingSuccess`,
-      cancel_url: `${process.env.FE_URL}/cart?payment=cancelled`,
+      success_url: 'https://spiffy-melba-42211b.netlify.app/bookingSuccess',
+      cancel_url: 'https://spiffy-melba-42211b.netlify.app/cart?payment=cancelled',
       // Optionally, you can store information in a cookie or use cookies to customize the session.
     });
 
